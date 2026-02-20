@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "EvoTree",
+    "slug": "evotree",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./public/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./public/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.evotree.mobile",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "EvoTree accesses your photo library for tree image export.",
+        "NSPhotoLibraryAddUsageDescription": "EvoTree saves your phylogenetic tree image to your photo library."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./public/adaptive-icon.png",
+        "backgroundColor": "#000000"
+      },
+      "package": "com.evotree.mobile",
+      "permissions": [
+        "READ_MEDIA_IMAGES",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./public/favicon.ico"
+    },
+    "plugins": [
+      "expo-media-library"
+    ]
+  }
+}

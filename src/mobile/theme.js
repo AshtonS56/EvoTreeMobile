@@ -1,0 +1,48 @@
+export const theme = {
+  colors: {
+    background: "#0a0c12",
+    card: "rgba(20, 24, 34, 0.9)",
+    cardStrong: "rgba(24, 29, 41, 0.95)",
+    border: "#3f475f",
+    primary: "#f2c66d",
+    primaryDark: "#c79e44",
+    secondary: "#e26a6a",
+    text: "#f5f7fb",
+    mutedText: "#c6cddd",
+    subtleText: "#96a0b8",
+    overlay: "rgba(5, 8, 14, 0.78)",
+    input: "#171d2b",
+    success: "#6aa3ff",
+    navBg: "rgba(9, 12, 20, 0.96)",
+  },
+  spacing: {
+    xs: 6,
+    sm: 10,
+    md: 16,
+    lg: 24,
+    xl: 32,
+    xxl: 40,
+  },
+  radii: {
+    sm: 10,
+    md: 14,
+    lg: 18,
+    pill: 999,
+  },
+  shadows: {
+    card: {
+      shadowColor: "#000",
+      shadowOpacity: 0.32,
+      shadowRadius: 12,
+      shadowOffset: { width: 0, height: 6 },
+      elevation: 6,
+    },
+    floating: {
+      shadowColor: "#000",
+      shadowOpacity: 0.4,
+      shadowRadius: 16,
+      shadowOffset: { width: 0, height: 8 },
+      elevation: 10,
+    },
+  },
+};
