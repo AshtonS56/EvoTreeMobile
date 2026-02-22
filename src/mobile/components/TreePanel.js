@@ -10,10 +10,15 @@ const TreePanel = ({
   treeData,
   onSaveTree,
   onClearTree,
+  onUndoTree,
   treeCaptureRef,
   saveLabel = "Save Tree Image",
   saveVariant = "secondary",
   saveDisabled = false,
+  showUndo = false,
+  undoLabel = "Undo Last Species",
+  undoVariant = "secondary",
+  undoDisabled = false,
   showClear = true,
   clearLabel = "Clear Tree",
   clearCompact = false,
@@ -54,6 +59,10 @@ const TreePanel = ({
       buttons.push({ text: saveLabel, onPress: onSaveTree });
     }
 
+    if (showUndo && typeof onUndoTree === "function" && !undoDisabled) {
+      buttons.push({ text: undoLabel, onPress: onUndoTree });
+    }
+
     if (showClear && typeof onClearTree === "function") {
       buttons.push({ text: clearLabel, style: "destructive", onPress: handleClear });
     }
@@ -86,6 +95,16 @@ const TreePanel = ({
               disabled={saveDisabled}
             />
           </View>
+          {showUndo ? (
+            <View style={styles.actionItem}>
+              <ActionButton
+                label={undoLabel}
+                onPress={onUndoTree}
+                variant={undoVariant}
+                disabled={undoDisabled}
+              />
+            </View>
+          ) : null}
           {showClear ? (
             <View style={[styles.actionItem, clearCompact && styles.compactActionItem]}>
               <ActionButton

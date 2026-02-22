@@ -15,12 +15,6 @@ import { theme } from "../theme";
 
 const parentCompanyUrl = "https://www.epoch-technologies.com/";
 
-const overviewChips = [
-  { label: "Core Idea", value: "DNA similarity" },
-  { label: "Evidence", value: "Genes + traits" },
-  { label: "Main Output", value: "Relationship tree" },
-];
-
 const infoSections = [
   {
     id: "what",
@@ -200,14 +194,6 @@ const AboutScreen = ({ navigation, route }) => {
           Learn how this tree organizes species using DNA and trait
           similarities. Tap each section to expand practical explanations.
         </Text>
-        <View style={styles.chipWrap}>
-          {overviewChips.map((chip) => (
-            <View key={chip.label} style={styles.chip}>
-              <Text style={styles.chipLabel}>{chip.label}</Text>
-              <Text style={styles.chipValue}>{chip.value}</Text>
-            </View>
-          ))}
-        </View>
       </View>
 
       <View style={styles.stack}>
@@ -284,34 +270,6 @@ const styles = StyleSheet.create({
     color: theme.colors.mutedText,
     fontSize: 15,
     lineHeight: 23,
-  },
-  chipWrap: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: theme.spacing.sm,
-  },
-  chip: {
-    minWidth: "31%",
-    flexGrow: 1,
-    borderColor: "rgba(255, 255, 255, 0.14)",
-    borderWidth: 1,
-    borderRadius: theme.radii.md,
-    backgroundColor: "rgba(12, 16, 28, 0.8)",
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    gap: 3,
-  },
-  chipLabel: {
-    color: theme.colors.subtleText,
-    fontSize: 11,
-    fontWeight: "700",
-    textTransform: "uppercase",
-    letterSpacing: 0.4,
-  },
-  chipValue: {
-    color: theme.colors.primary,
-    fontSize: 14,
-    fontWeight: "700",
   },
   stack: {
     gap: theme.spacing.sm,

@@ -9,6 +9,9 @@ const DEPTH_GAP = 120;
 const PAD_X = 36;
 const PAD_Y = 36;
 const MAX_LABEL_LENGTH = 42;
+const NODE_LABEL_FONT_SIZE = 14;
+const NODE_LABEL_VERTICAL_GAP = 10;
+const BRANCH_STROKE_WIDTH = 2.6;
 
 const truncateLabel = (label) => {
   const value = String(label || "Unknown");
@@ -206,7 +209,7 @@ const TreeCanvas = ({ treeData, fillHeight = false }, captureRef) => {
                     d={path}
                     fill="none"
                     stroke={theme.colors.border}
-                    strokeWidth={1.2}
+                    strokeWidth={BRANCH_STROKE_WIDTH}
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
@@ -223,8 +226,8 @@ const TreeCanvas = ({ treeData, fillHeight = false }, captureRef) => {
                   />
                   <SvgText
                     x={node.x}
-                    y={node.y - NODE_RADIUS - 8}
-                    fontSize="12"
+                    y={node.y - NODE_RADIUS - NODE_LABEL_VERTICAL_GAP}
+                    fontSize={NODE_LABEL_FONT_SIZE}
                     fill={theme.colors.text}
                     textAnchor="middle"
                   >

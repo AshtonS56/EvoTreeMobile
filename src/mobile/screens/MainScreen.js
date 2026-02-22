@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ScreenContainer from "../components/ScreenContainer";
@@ -146,15 +146,28 @@ const keepMainTaxonomyRanks = (path) => {
   return MAIN_TAXONOMY_RANK_ORDER.map((rank) => byRank.get(rank)).filter(Boolean);
 };
 
+const buildPreviewTree = (entries) => {
+  const tree = createEmptyTree();
+  entries.forEach((entry) => {
+    if (Array.isArray(entry?.taxonomyPath) && entry.taxonomyPath.length) {
+      mergeTrees(tree, entry.taxonomyPath);
+    }
+  });
+  return tree;
+};
+
 const MainScreen = ({ navigation, route }) => {
   const [animalName, setAnimalName] = useState("");
   const [mainTreeData, setMainTreeData] = useState(createEmptyTree());
-  const [previewTreeData, setPreviewTreeData] = useState(createEmptyTree());
-  const [previewTaxonomyPath, setPreviewTaxonomyPath] = useState([]);
+  const [previewSpeciesEntries, setPreviewSpeciesEntries] = useState([]);
   const [storageReady, setStorageReady] = useState(false);
   const [loading, setLoading] = useState({ visible: false, label: "" });
 
   const vernacularCacheRef = useRef(new Map());
+  const previewTreeData = useMemo(
+    () => buildPreviewTree(previewSpeciesEntries),
+    [previewSpeciesEntries]
+  );
 
   const setLoadingState = (visible, label = "") => {
     setLoading({ visible, label });
@@ -637,11 +650,41 @@ const MainScreen = ({ navigation, route }) => {
       }
 
       const taxonomyPath = await fetchFullTaxonomy(resolvedKey);
-      const matchedSpeciesName = taxonomyPath[taxonomyPath.length - 1]?.name || "";
+      if (!taxonomyPath.length) {
+        Alert.alert(
+          "Not Found",
+          "A taxonomy path could not be built for this species. Try a different name."
+        );
+        return;
+      }
 
-      const previewTree = mergeTrees(createEmptyTree(), taxonomyPath);
-      setPreviewTreeData(previewTree);
-      setPreviewTaxonomyPath(taxonomyPath);
+      const matchedSpeciesNode = taxonomyPath[taxonomyPath.length - 1] || {};
+      const matchedSpeciesName = matchedSpeciesNode?.name || "";
+      const matchedSpeciesKey = String(matchedSpeciesNode?.key || resolvedKey);
+
+      const alreadyInPreview = previewSpeciesEntries.some(
+        (entry) => entry.speciesKey === matchedSpeciesKey
+      );
+      if (alreadyInPreview) {
+        if (matchedSpeciesName) {
+          setAnimalName(matchedSpeciesName);
+        }
+
+        Alert.alert(
+          "Already In Preview",
+          `${matchedSpeciesName || value} is already in your preview tree.`
+        );
+        return;
+      }
+
+      setPreviewSpeciesEntries((previous) => [
+        ...previous,
+        {
+          speciesKey: matchedSpeciesKey,
+          speciesName: matchedSpeciesName || value,
+          taxonomyPath,
+        },
+      ]);
 
       if (matchedSpeciesName) {
         setAnimalName(matchedSpeciesName);
@@ -661,12 +704,25 @@ const MainScreen = ({ navigation, route }) => {
   };
 
   const clearTreeData = () => {
-    setPreviewTreeData(createEmptyTree());
-    setPreviewTaxonomyPath([]);
+    setPreviewSpeciesEntries([]);
+  };
+
+  const undoPreviewSpecies = () => {
+    const lastSpecies = previewSpeciesEntries[previewSpeciesEntries.length - 1];
+    if (!lastSpecies) {
+      Alert.alert("Nothing To Undo", "Add a species to preview first.");
+      return;
+    }
+
+    setPreviewSpeciesEntries((previous) => previous.slice(0, -1));
+    Alert.alert(
+      "Removed From Preview",
+      `${lastSpecies.speciesName || "Species"} was removed from preview.`
+    );
   };
 
   const addPreviewToMainTree = () => {
-    if (!previewTaxonomyPath.length) {
+    if (!previewSpeciesEntries.length) {
       Alert.alert(
         "Nothing To Add",
         "Preview a species first, then use this button to add it to your main tree."
@@ -674,15 +730,25 @@ const MainScreen = ({ navigation, route }) => {
       return;
     }
 
-    const matchedSpeciesName =
-      previewTaxonomyPath[previewTaxonomyPath.length - 1]?.name || "species";
-
     setMainTreeData((previous) => {
       const baseTree = cloneTree(previous);
-      return mergeTrees(baseTree, previewTaxonomyPath);
+      previewSpeciesEntries.forEach((entry) => {
+        mergeTrees(baseTree, entry.taxonomyPath);
+      });
+      return baseTree;
     });
 
-    Alert.alert("Added", `${matchedSpeciesName} was added to your main tree.`);
+    if (previewSpeciesEntries.length === 1) {
+      const matchedSpeciesName =
+        previewSpeciesEntries[0]?.speciesName || "The species";
+      Alert.alert("Added", `${matchedSpeciesName} was added to your main tree.`);
+      return;
+    }
+
+    Alert.alert(
+      "Added",
+      `${previewSpeciesEntries.length} species were added to your main tree.`
+    );
   };
 
   return (
@@ -700,10 +766,15 @@ const MainScreen = ({ navigation, route }) => {
           treeData={previewTreeData}
           onSaveTree={addPreviewToMainTree}
           onClearTree={clearTreeData}
+          onUndoTree={undoPreviewSpecies}
           saveLabel="Add Species To Main Tree"
           saveVariant="primary"
-          saveDisabled={!previewTaxonomyPath.length || loading.visible}
+          saveDisabled={!previewSpeciesEntries.length || loading.visible}
+          showUndo
+          undoLabel="Undo Last Species"
+          undoDisabled={!previewSpeciesEntries.length || loading.visible}
           clearLabel="Clear Preview"
+          clearConfirmMessage="This removes all species currently in preview."
         />
       </View>
 

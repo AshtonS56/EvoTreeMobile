@@ -30,7 +30,7 @@ const ImageControls = ({
     <View style={styles.card}>
       <Text style={styles.title}>Species Name Entry</Text>
       <Text style={styles.instructions}>
-        Enter a species name to preview its taxonomy path and add it to your saved tree.
+        Enter species names to build a preview tree, then add that preview to your saved tree.
       </Text>
 
       <TextInput
