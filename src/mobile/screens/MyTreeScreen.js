@@ -107,6 +107,8 @@ const MyTreeScreen = ({ navigation, route }) => {
           actionsInMenu
           cardStyle={styles.treeCard}
           canvasFill
+          fitToViewport
+          zoomEnabled
         />
       </View>
 

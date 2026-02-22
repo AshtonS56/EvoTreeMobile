@@ -2,6 +2,7 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import LandingScreen from "./screens/LandingScreen";
 import MainScreen from "./screens/MainScreen";
 import MyTreeScreen from "./screens/MyTreeScreen";
@@ -10,7 +11,7 @@ import AboutScreen from "./screens/AboutScreen";
 const Stack = createNativeStackNavigator();
 
 const MobileApp = () => (
-  <>
+  <GestureHandlerRootView style={{ flex: 1 }}>
     <StatusBar style="light" />
     <NavigationContainer>
       <Stack.Navigator
@@ -26,7 +27,7 @@ const MobileApp = () => (
         <Stack.Screen name="About" component={AboutScreen} />
       </Stack.Navigator>
     </NavigationContainer>
-  </>
+  </GestureHandlerRootView>
 );
 
 export default MobileApp;

@@ -28,6 +28,9 @@ const TreePanel = ({
   actionsInMenu = false,
   cardStyle,
   canvasFill = false,
+  fitToViewport = false,
+  zoomEnabled = false,
+  canvasHeight,
 }) => {
   const handleClear = () => {
     const performSecondStep = () => {
@@ -84,29 +87,38 @@ const TreePanel = ({
           </Pressable>
         ) : null}
       </View>
-      <TreeCanvas treeData={treeData} ref={treeCaptureRef} fillHeight={canvasFill} />
+      <TreeCanvas
+        treeData={treeData}
+        ref={treeCaptureRef}
+        fillHeight={canvasFill}
+        fitToViewport={fitToViewport}
+        zoomEnabled={zoomEnabled}
+        preferredHeight={canvasHeight}
+      />
       {!actionsInMenu ? (
         <View style={styles.actions}>
-          <View style={styles.actionItem}>
-            <ActionButton
-              label={saveLabel}
-              onPress={onSaveTree}
-              variant={saveVariant}
-              disabled={saveDisabled}
-            />
-          </View>
-          {showUndo ? (
-            <View style={styles.actionItem}>
+          <View style={styles.primaryActionsRow}>
+            <View style={styles.primaryActionItem}>
               <ActionButton
-                label={undoLabel}
-                onPress={onUndoTree}
-                variant={undoVariant}
-                disabled={undoDisabled}
+                label={saveLabel}
+                onPress={onSaveTree}
+                variant={saveVariant}
+                disabled={saveDisabled}
               />
             </View>
-          ) : null}
+            {showUndo ? (
+              <View style={styles.primaryActionItem}>
+                <ActionButton
+                  label={undoLabel}
+                  onPress={onUndoTree}
+                  variant={undoVariant}
+                  disabled={undoDisabled}
+                />
+              </View>
+            ) : null}
+          </View>
           {showClear ? (
-            <View style={[styles.actionItem, clearCompact && styles.compactActionItem]}>
+            <View style={[styles.clearActionRow, clearCompact && styles.compactActionItem]}>
               <ActionButton
                 label={clearLabel}
                 onPress={handleClear}
@@ -154,13 +166,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   actions: {
+    gap: theme.spacing.xs,
+  },
+  primaryActionsRow: {
     flexDirection: "row",
     gap: theme.spacing.xs,
-    flexWrap: "wrap",
   },
-  actionItem: {
-    flexBasis: "49%",
-    flexGrow: 1,
+  primaryActionItem: {
+    flex: 1,
+    minWidth: 0,
+  },
+  clearActionRow: {
+    width: "100%",
   },
   compactActionItem: {
     flexBasis: "auto",

@@ -44,15 +44,7 @@
     },
     "plugins": [
       "expo-media-library",
-      "expo-font",
-      [
-        "expo-splash-screen",
-        {
-          "backgroundColor": "#000000",
-          "image": "./public/splash-icon.png",
-          "resizeMode": "contain"
-        }
-      ]
+      "expo-font"
     ],
     "extra": {
       "eas": {

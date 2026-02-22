@@ -8,6 +8,7 @@ const ActionButton = ({
   variant = "primary",
   disabled = false,
   compact = false,
+  singleLine = false,
 }) => {
   const isSecondary = variant === "secondary";
 
@@ -23,7 +24,12 @@ const ActionButton = ({
         disabled && styles.disabled,
       ]}
     >
-      <Text style={[styles.text, isSecondary ? styles.secondaryText : null]}>
+      <Text
+        numberOfLines={singleLine ? 1 : undefined}
+        adjustsFontSizeToFit={singleLine}
+        minimumFontScale={singleLine ? 0.82 : undefined}
+        style={[styles.text, isSecondary ? styles.secondaryText : null]}
+      >
         {label}
       </Text>
     </Pressable>

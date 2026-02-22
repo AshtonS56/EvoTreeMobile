@@ -690,12 +690,6 @@ const MainScreen = ({ navigation, route }) => {
         setAnimalName(matchedSpeciesName);
       }
 
-      if (
-        matchedSpeciesName &&
-        matchedSpeciesName.toLowerCase() !== value.toLowerCase()
-      ) {
-        Alert.alert("Matched Species", `Previewing as ${matchedSpeciesName}.`);
-      }
     } catch (error) {
       Alert.alert("Tree Update Error", error.message || "Failed to add species.");
     } finally {
@@ -767,14 +761,15 @@ const MainScreen = ({ navigation, route }) => {
           onSaveTree={addPreviewToMainTree}
           onClearTree={clearTreeData}
           onUndoTree={undoPreviewSpecies}
-          saveLabel="Add Species To Main Tree"
+          saveLabel={"Add Species To\nMain Tree"}
           saveVariant="primary"
           saveDisabled={!previewSpeciesEntries.length || loading.visible}
           showUndo
-          undoLabel="Undo Last Species"
+          undoLabel={"Undo Last\nSpecies"}
           undoDisabled={!previewSpeciesEntries.length || loading.visible}
           clearLabel="Clear Preview"
           clearConfirmMessage="This removes all species currently in preview."
+          canvasHeight={210}
         />
       </View>
 
